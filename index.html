@@ -118,19 +118,14 @@
 <body>
   <div id="app">
     <h1>Lessons Available</h1>
-    <h3>Soft By</h3>
-    <label>
-      <input type="radio" value="subject" v-model="sortCriteria" /> Subject
-    </label>
-    <label>
-      <input type="radio" value="location" v-model="sortCriteria" /> Location
-    </label>
-    <label>
-      <input type="radio" value="price" v-model="sortCriteria" /> Price
-    </label>
-    <label>
-      <input type="radio" value="availableInventory" v-model="sortCriteria" /> Availability
-    </label>
+    <h3>Sort By</h3>
+    <select v-model="sortCriteria">
+      <option value="subject">Subject</option>
+      <option value="location">Location</option>
+      <option value="price">Price</option>
+      <option value="availableInventory">Availability</option>
+    </select>
+    
 
     
       <label>
