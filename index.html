@@ -118,7 +118,30 @@
 <body>
   <div id="app">
     <h1>Lessons Available</h1>
+    <h3>Soft By</h3>
+    <label>
+      <input type="radio" value="subject" v-model="sortCriteria" /> Subject
+    </label>
+    <label>
+      <input type="radio" value="location" v-model="sortCriteria" /> Location
+    </label>
+    <label>
+      <input type="radio" value="price" v-model="sortCriteria" /> Price
+    </label>
+    <label>
+      <input type="radio" value="availableInventory" v-model="sortCriteria" /> Availability
+    </label>
+
+    
+      <label>
+        <input type="radio" value="ascending" v-model="sortOrder" /> Ascending
+      </label>
+      <label>
+        <input type="radio" value="descending" v-model="sortOrder" /> Descending
+      </label>
+
     <button @click="toggleCheckout" class="checkout-button">{{ showCheckout ? 'Go back to lessons' : 'Checkout' }}</button>
+
 
     <!-- Lessons List -->
     <div v-if="!showCheckout">
