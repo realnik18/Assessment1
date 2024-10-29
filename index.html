@@ -119,6 +119,7 @@
   <div id="app">
     <h1>Lessons Available</h1>
     <h3>Sort By</h3>
+    <!-- Dropdown for Sort Criteria -->
     <select v-model="sortCriteria">
       <option value="subject">Subject</option>
       <option value="location">Location</option>
@@ -126,17 +127,16 @@
       <option value="availableInventory">Availability</option>
     </select>
     
-
-    
-      <label>
-        <input type="radio" value="ascending" v-model="sortOrder" /> Ascending
-      </label>
-      <label>
-        <input type="radio" value="descending" v-model="sortOrder" /> Descending
-      </label>
+    <h3>Order</h3>
+    <!-- Sort Order -->
+    <label>
+      <input type="radio" value="ascending" v-model="sortOrder" /> Ascending
+    </label>
+    <label>
+      <input type="radio" value="descending" v-model="sortOrder" /> Descending
+    </label>
 
     <button @click="toggleCheckout" class="checkout-button">{{ showCheckout ? 'Go back to lessons' : 'Checkout' }}</button>
-
 
     <!-- Lessons List -->
     <div v-if="!showCheckout">
@@ -191,9 +191,9 @@
     createApp({
       data() {
         return {
-          sortBy: 'price',
-          sortOrder: 'asc',
-          lesson: window.lesson,
+          sortCriteria: 'price', // Default sort criteria
+          sortOrder: 'ascending', // Default sort order
+          lesson: window.lesson, // Lessons data from global scope
           cart: [],
           showCheckout: false,
           customerName: '',
@@ -203,10 +203,14 @@
       computed: {
         sortedLesson() {
           return [...this.lesson].sort((a, b) => {
-            const modifier = this.sortOrder === 'asc' ? 1 : -1;
-            if (a[this.sortBy] < b[this.sortBy]) return -1 * modifier;
-            if (a[this.sortBy] > b[this.sortBy]) return 1 * modifier;
-            return 0;
+            const modifier = this.sortOrder === 'ascending' ? 1 : -1;
+            
+            // Handling string values (subject, location) and numeric values (price, availableInventory)
+            if (typeof a[this.sortCriteria] === 'string') {
+              return a[this.sortCriteria].localeCompare(b[this.sortCriteria]) * modifier;
+            } else {
+              return (a[this.sortCriteria] - b[this.sortCriteria]) * modifier;
+            }
           });
         },
         totalCost() {
