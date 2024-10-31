@@ -143,6 +143,12 @@
       background-color: #45a049;
     }
 
+    .error {
+  color: red;
+  font-size: 0.9em;
+}
+
+
   </style>
 </head>
 <body>
@@ -166,7 +172,7 @@
       <input type="radio" value="descending" v-model="sortOrder" /> Descending
     </label>
 
-    <button v-if="cart.length > 0" @click="toggleCheckout" class="checkout-button">
+    <button v-if="cart.length > 0 || showCheckout" @click="toggleCheckout" class="checkout-button">
       {{ showCheckout ? 'Go back to lessons' : 'Checkout' }}
     </button>
 
@@ -192,13 +198,17 @@
         <label>
           Name:
           <input v-model="customerName" type="text" placeholder="Enter your name" required>
+          <span v-if="nameError" class="error">{{ nameError }}</span>
         </label>
         <label>
           Phone:
           <input v-model="customerPhone" type="tel" placeholder="Enter your phone" required>
+          <span v-if="phoneError" class="error">{{ phoneError }}</span>
         </label>
         <button @click="placeOrder" class="checkout-button" :disabled="!isFormValid">Checkout</button>
       </div>
+      
+      
 
       <h2 class="cart-header">Shopping Cart</h2>
       <div v-if="cart.length > 0" class="cart-section">
@@ -248,8 +258,17 @@
         totalCost() {
           return this.cart.reduce((sum, item) => sum + item.price, 0);
         },
+        nameError() {
+      return this.customerName.trim() === '' ? 'Name is required' : '';
+    },
+        phoneError() {
+      const phonePattern = /^[0-9]{10}$/;
+      return !phonePattern.test(this.customerPhone)
+        ? 'Phone must be a 10-digit number'
+        : '';
+    },
         isFormValid() {
-          return this.customerName.trim() !== '' && this.customerPhone.trim() !== '';
+          return !this.nameError && !this.phoneError;;
         }
       },
       methods: {
