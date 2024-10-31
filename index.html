@@ -11,15 +11,27 @@
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+
     .checkout-header, .cart-header {
       font-size: 1.5em;
       margin-bottom: 10px;
+      text-align: center;
     }
 
     .checkout-form {
       display: flex;
       gap: 20px;
       align-items: center;
+      justify-content: center;
       margin-bottom: 20px;
     }
 
@@ -34,6 +46,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       margin-top: 5px;
+      width: 200px;
     }
 
     .checkout-button {
@@ -43,8 +56,14 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      display: inline-block;
+      transition: background-color 0.3s;
     }
-    .checkout-button:hover {
+    .checkout-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .checkout-button:hover:not(:disabled) {
       background-color: #0056b3;
     }
 
@@ -76,16 +95,16 @@
       padding: 8px;
       margin-top: 10px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     .remove-button:hover {
       background-color: #0056b3;
     }
 
     .lesson-grid {
-      display: flex;
-      flex-wrap: nowrap;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      overflow-x: auto;
       width: 100%;
     }
 
@@ -93,8 +112,6 @@
       border: 1px solid #ddd;
       padding: 16px;
       border-radius: 8px;
-      width: 200px;
-      flex-shrink: 0;
       text-align: center;
     }
 
@@ -105,6 +122,7 @@
       padding: 8px 16px;
       border-radius: 4px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     .add-button:disabled {
       background-color: #ccc;
@@ -136,7 +154,9 @@
       <input type="radio" value="descending" v-model="sortOrder" /> Descending
     </label>
 
-    <button @click="toggleCheckout" class="checkout-button">{{ showCheckout ? 'Go back to lessons' : 'Checkout' }}</button>
+    <button v-if="cart.length > 0" @click="toggleCheckout" class="checkout-button">
+      {{ showCheckout ? 'Go back to lessons' : 'Checkout' }}
+    </button>
 
     <!-- Lessons List -->
     <div v-if="!showCheckout">
@@ -165,7 +185,7 @@
           Phone:
           <input v-model="customerPhone" type="tel" placeholder="Enter your phone" required>
         </label>
-        <button @click="placeOrder" class="checkout-button">Checkout</button>
+        <button @click="placeOrder" class="checkout-button" :disabled="!isFormValid">Checkout</button>
       </div>
 
       <h2 class="cart-header">Shopping Cart</h2>
@@ -215,6 +235,9 @@
         },
         totalCost() {
           return this.cart.reduce((sum, item) => sum + item.price, 0);
+        },
+        isFormValid() {
+          return this.customerName.trim() !== '' && this.customerPhone.trim() !== '';
         }
       },
       methods: {
@@ -225,7 +248,7 @@
           if (lesson.availableInventory > 0) {
             this.cart.push(lesson);
             lesson.availableInventory -= 1;
-            alert(`${lesson.subject} in ${lesson.location} added to cart!`);
+            
           }
         },
         removeFromCart(item) {
@@ -236,7 +259,7 @@
           }
         },
         placeOrder() {
-          if (this.customerName && this.customerPhone) {
+          if (this.isFormValid) {
             alert(`Thank you for your order, ${this.customerName}!`);
             this.cart = [];
             this.customerName = '';
