@@ -154,6 +154,9 @@
 <body>
   <div id="app">
     <h1>Lessons Available</h1>
+    <h3>Search Lessons</h3>
+    <input v-model="searchQuery" type="text" placeholder="Search for lessons..." />
+
     <h3>Sort By</h3>
     <!-- Dropdown for Sort Criteria -->
     <select v-model="sortCriteria">
@@ -179,7 +182,7 @@
     <!-- Lessons List -->
     <div v-if="!showCheckout">
       <div class="lesson-grid">
-        <div v-for="lesson in sortedLesson" :key="lesson.id" class="lesson-card">
+        <div v-for="lesson in filteredAndSortedLessons" :key="lesson.id" class="lesson-card">
           <h2><i :class="lesson.icon"></i> {{ lesson.subject }}</h2>
           <p>Location: {{ lesson.location }}</p>
           <p>Price: £{{ lesson.price }}</p>
@@ -239,15 +242,26 @@
           cart: [],
           showCheckout: false,
           customerName: '',
-          customerPhone: ''
+          customerPhone: '',
+          searchQuery: '' // Search query for filtering lessons
         };
       },
       computed: {
-        sortedLesson() {
-          return [...this.lesson].sort((a, b) => {
+        filteredAndSortedLessons() {
+          // First, filter lessons based on the search query
+          const filteredLessons = this.lesson.filter(lesson => {
+            const query = this.searchQuery.toLowerCase();
+            return (
+              lesson.subject.toLowerCase().includes(query) ||
+              lesson.location.toLowerCase().includes(query) ||
+              String(lesson.price).includes(query) ||
+              String(lesson.availableInventory).includes(query)
+            );
+          });
+
+          // Then, sort the filtered lessons
+          return filteredLessons.sort((a, b) => {
             const modifier = this.sortOrder === 'ascending' ? 1 : -1;
-            
-            // Handling string values (subject, location) and numeric values (price, availableInventory)
             if (typeof a[this.sortCriteria] === 'string') {
               return a[this.sortCriteria].localeCompare(b[this.sortCriteria]) * modifier;
             } else {
