@@ -1,0 +1,51 @@
+{
+  "info": {
+    "name": "Lessons Store API",
+    "description": "API endpoints for the lessons store",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Get Lessons",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/lessons",
+        "description": "Get all available lessons"
+      }
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/orders",
+        "header": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": {
+            "name": "Nikita",
+            "phone": "0552429835",
+            "lessons": [
+              {
+                "subject": "Art",
+                "location": "Liverpool",
+                "price": 85,
+                "availableInventory": 4
+              }
+            ]
+          }
+        },
+        "description": "Create a new order"
+      }
+    },
+    {
+      "name": "Get Orders",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/orders",
+        "description": "Get all orders"
+      }
+    }
+  ]
+} 
