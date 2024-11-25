@@ -1,0 +1,148 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #fffaf0; /* Light background for the page */
+  }
+
+  h1, h2 {
+    text-align: center;
+    color: #333;
+  }
+
+  .checkout-header, .cart-header {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #333;
+  }
+
+  .checkout-form {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .checkout-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: #555; /* Slightly darker text for form labels */
+  }
+
+  .checkout-form input {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+    width: 200px;
+  }
+
+  .checkout-button {
+    position: fixed; /* Fix the position */
+    top: 20px;       /* Adjust vertical position */
+    right: 20px;     /* Align to the right side of the page */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;      /* Use flexbox for alignment */
+    align-items: center; /* Vertically align icon and text */
+    gap: 8px;           /* Space between icon and text */
+    transition: background-color 0.3s;
+  }
+  
+  .checkout-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .checkout-button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
+  .checkout-button i {
+    font-size: 18px; /* Adjust icon size */
+  }
+  
+
+  .cart-section {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .cart-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    width: 200px;
+    background-color: #fff9e6; /* Light yellow for cart items */
+  }
+
+  .cart-item h3 {
+    font-size: 1.2em;
+    color: #333;
+  }
+
+  .remove-button {
+    background-color: #ff6b6b; /* Red color for remove button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .remove-button:hover {
+    background-color: #ff4a4a;
+  }
+
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
+  }
+
+  .lesson-card {
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #e0f7fa; /* Light blue for lesson cards */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+
+  .lesson-card h2 {
+    color: #00796b; /* Teal color for lesson titles */
+  }
+
+  .add-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .add-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  .add-button:hover:enabled {
+    background-color: #45a049;
+  }
+
+  .error {
+color: red;
+font-size: 0.9em;
+}
