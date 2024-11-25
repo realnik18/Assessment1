@@ -1,0 +1,14 @@
+{
+    "name": "name",
+    "description": "description",
+    "authors": "author",
+    "version": "1.0.0",
+    "main": "pathToMain",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.21.1",
+        "mongoose": "^8.8.2",
+        "morgan": "^1.10.0",
+        "postman": "^0.2.0"
+    }
+}
