@@ -37,10 +37,15 @@
       <input type="radio" value="descending" v-model="sortOrder" /> Descending
     </label>
 
-    <button v-if="cart.length > 0 || showCheckout" @click="toggleCheckout" class="checkout-button">
-      <i class="fas fa-shopping-cart"></i>
-      {{ showCheckout ? 'Go back to lessons' : 'Checkout' }}
-    </button>
+    <!-- Split into two separate buttons -->
+    <div class="nav-buttons">
+      <button v-if="showCheckout" @click="toggleCheckout" class="back-button">
+        <i class="fas fa-arrow-left"></i> Go back to lessons
+      </button>
+      <button v-if="cart.length > 0 && !showCheckout" @click="toggleCheckout" class="checkout-button">
+        <i class="fas fa-shopping-cart"></i> Checkout
+      </button>
+    </div>
 
     <!-- Lessons List -->
     <div v-if="!showCheckout">
@@ -97,6 +102,15 @@
       <div v-else>
         <p>Your cart is empty.</p>
       </div>
+
+      <div v-if="orderConfirmed" class="confirmation-message">
+        <i class="fas fa-check-circle"></i>
+        <h2>Thank You!</h2>
+        <p>{{ confirmationMessage }}</p>
+        <button @click="returnToLessons" class="back-button">
+          <i class="fas fa-arrow-left"></i> Return to Lessons
+        </button>
+      </div>
     </div>
   </div>
 
@@ -113,7 +127,9 @@
           showCheckout: false,
           customerName: '',
           customerPhone: '',
-          searchQuery: '' // Search query for filtering lessons
+          searchQuery: '', // Search query for filtering lessons
+          orderConfirmed: false,
+          confirmationMessage: ''
         };
       },
       computed: {
@@ -183,16 +199,54 @@
             item.availableInventory += 1; // Restore inventory when item is removed from cart
           }
         },
+        validateName() {
+          const name = this.customerName.trim();
+          if (name === '') {
+            return 'Name is required';
+          }
+          if (name.length < 3) {
+            return 'Name must be at least 3 characters';
+          }
+          if (!/^[a-zA-Z\s]*$/.test(name)) {
+            return 'Name can only contain letters and spaces';
+          }
+          return '';
+        },
         placeOrder() {
           if (this.isFormValid) {
-            alert(`Thank you for your order, ${this.customerName}!`);
-            this.cart = [];
-            this.customerName = '';
-            this.customerPhone = '';
-            this.showCheckout = false;
-          } else {
-            alert("Please enter your name and phone number.");
+            const order = {
+              name: this.customerName,
+              phone: this.customerPhone,
+              lessons: this.cart
+            };
+
+            console.log('Sending order:', order);
+
+            fetch('http://localhost:3000/orders', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(order)
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              this.orderConfirmed = true;
+              this.confirmationMessage = `Thank you for your order, ${this.customerName}!`;
+              this.cart = [];
+              this.customerName = '';
+              this.customerPhone = '';
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('Error processing order. Please try again.');
+            });
           }
+        },
+        returnToLessons() {
+          this.orderConfirmed = false;
+          this.showCheckout = false;
         }
       }
     }).mount('#app');
