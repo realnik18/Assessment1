@@ -11,7 +11,8 @@ app.use(express.static('public'));
 
 // Add CORS middleware
 app.use(cors({
-    origin: 'http://127.0.0.1:5500', // Your frontend URL
+    //origin: 'http://127.0.0.1:5500', // Your frontend URL
+    origin: 'https://assessment1-le5c.onrender.com', // Update to your frontend URL
     methods: ['GET', 'POST'],
     credentials: true
 }));
