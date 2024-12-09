@@ -10,5 +10,9 @@
         "mongoose": "^8.8.2",
         "morgan": "^1.10.0",
         "postman": "^0.2.0"
-    }
+    },
+    "scripts": {
+        "start": "node server.js"
+    },
+    "license": "MIT"
 }
