@@ -35,9 +35,10 @@ const orderSchema = new mongoose.Schema({
     name: String,
     phone: String,
     lessons: [{
-        topic: String,
+        subject: String,
         location: String,
-        price: Number
+        price: Number,
+        availableInventory: Number
     }]
 });
 
@@ -71,11 +72,13 @@ app.post('/orders', async (req, res) => {
 
         // Update spaces for each lesson
         for (let lesson of req.body.lessons) {
-            await Lesson.findOneAndUpdate(
+            console.log(`Updating inventory for lesson: ${lesson.subject}`);
+            const result = await Lesson.findOneAndUpdate(
                 { subject: lesson.subject },
-                { $inc: { space: -1 } }
+                { $inc: { availableInventory: -1 } },
+                { new: true }
             );
-            console.log('Space Updated Successfully!');
+            console.log('Update result:', result);
         }
 
         res.status(201).json({
@@ -89,6 +92,16 @@ app.post('/orders', async (req, res) => {
             success: false,
             message: error.message
         });
+    }
+});
+
+app.post('/reset-lessons', async (req, res) => {
+    try {
+        await Lesson.updateMany({}, { $set: { space: 5 } });
+        res.status(200).json({ message: 'All lessons have been reset to 5 spaces available.' });
+    } catch (error) {
+        console.error('Error resetting lessons:', error.message);
+        res.status(500).json({ message: error.message });
     }
 });
 
